@@ -31,7 +31,7 @@ public class UserService {
     // El cliente solo puede modificar sus propios datos (validación de autorización en el controller)
     public UserEntity updateUser(Long id, UserEntity updatedData) {
         Optional<UserEntity> existing = userRepository.findById(id);
-        if (existing.isPresent()) {
+        if (!existing.isPresent()) {
             return null;
         }
         UserEntity user = existing.get();
