@@ -37,19 +37,14 @@ public class SecurityConfig {
         JwtAuthenticationConverter jwtConverter = new JwtAuthenticationConverter();
 
         jwtConverter.setJwtGrantedAuthoritiesConverter(jwt -> {
-            // 1. Usamos getClaimAsMap() para forzar el tipo a Map y evitar errores en el IDE
             java.util.Map<String, Object> realmAccess = jwt.getClaimAsMap("realm_access");
 
-            // 2. Si no existe o no tiene roles, devolvemos lista vacía
             if (realmAccess == null || realmAccess.get("roles") == null) {
                 return java.util.Collections.emptyList();
             }
-
-            // 3. Extraemos la lista de roles que está dentro de "realm_access"
             @SuppressWarnings("unchecked")
             java.util.Collection<String> roles = (java.util.Collection<String>) realmAccess.get("roles");
 
-            // 4. Los convertimos al formato "ROLE_NOMBRE" que Spring requiere
             return roles.stream()
                     .map(role -> new org.springframework.security.core.authority.SimpleGrantedAuthority("ROLE_" + role))
                     .collect(java.util.stream.Collectors.toList());
