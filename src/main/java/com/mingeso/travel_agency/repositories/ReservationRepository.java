@@ -8,6 +8,16 @@ import java.util.List;
 
 @Repository
 public interface ReservationRepository extends JpaRepository<ReservationEntity, Long> {
+
     long countByUserIdAndStatus(Long userId, String status);
+
+    // Para descuento por múltiples paquetes
+    long countByUserIdAndRegistrationDateAfter(Long userId, LocalDateTime after);
+
+    // Para validar reservas en paquetes antes de modificar campos críticos
+    long countByPackageId(Long packageId);
+
+    List<ReservationEntity> findByUserId(Long userId);
+
     List<ReservationEntity> findByRegistrationDateBetween(LocalDateTime start, LocalDateTime end);
 }
