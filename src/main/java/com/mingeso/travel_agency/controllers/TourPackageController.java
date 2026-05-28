@@ -39,7 +39,7 @@ public class TourPackageController {
             @RequestParam(required = false) Double minPrice,
             @RequestParam(required = false) Double maxPrice) {
 
-        boolean hasDestination = destination != null && !destination.isBlank();
+        boolean hasDestination = destination != null && !destination.isEmpty();
         boolean hasPrice = minPrice != null && maxPrice != null;
 
         if (hasDestination && hasPrice) {

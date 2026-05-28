@@ -31,7 +31,7 @@ public class UserService {
     // El cliente solo puede modificar sus propios datos (validación de autorización en el controller)
     public UserEntity updateUser(Long id, UserEntity updatedData) {
         Optional<UserEntity> existing = userRepository.findById(id);
-        if (existing.isEmpty()) {
+        if (existing.isPresent()) {
             return null;
         }
         UserEntity user = existing.get();
@@ -40,6 +40,10 @@ public class UserService {
         if (updatedData.getNationality() != null) user.setNationality(updatedData.getNationality());
         if (updatedData.getIdDocument() != null) user.setIdDocument(updatedData.getIdDocument());
         return userRepository.save(user);
+    }
+
+    public UserEntity getUserByEmail(String email) {
+        return userRepository.findByEmail(email).orElse(null);
     }
 
     // Borrado lógico: no elimina usuarios con historial de reservas, solo los marca inactivos

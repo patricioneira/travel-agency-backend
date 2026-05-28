@@ -36,6 +36,15 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @GetMapping("/me")
+    public ResponseEntity<UserEntity> getMe(@AuthenticationPrincipal Jwt jwt) {
+        String email = jwt.getClaimAsString("email");
+        UserEntity user = userService.getUserByEmail(email);
+        if (user == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(user);
+    }
+
     // Un cliente solo puede modificar sus propios datos
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @PutMapping("/{id}")

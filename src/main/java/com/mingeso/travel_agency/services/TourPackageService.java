@@ -5,6 +5,7 @@ import com.mingeso.travel_agency.repositories.ReservationRepository;
 import com.mingeso.travel_agency.repositories.TourPackageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import java.util.Optional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -73,8 +74,7 @@ public class TourPackageService {
 
     public TourPackageEntity updatePackage(Long id, TourPackageEntity updatedData) {
         Optional<TourPackageEntity> existing = tourPackageRepository.findById(id);
-        if (existing.isEmpty()) return null;
-
+        if (!existing.isPresent()) return null;
         TourPackageEntity pkg = existing.get();
 
         // Si hay reservas asociadas, no se pueden modificar campos críticos
@@ -107,8 +107,7 @@ public class TourPackageService {
     // Estados: AVAILABLE, SOLD_OUT, NOT_VALID, CANCELLED
     public TourPackageEntity updateStatus(Long id, String newStatus) {
         Optional<TourPackageEntity> existing = tourPackageRepository.findById(id);
-        if (existing.isEmpty()) return null;
-
+        if (!existing.isPresent()) return null;
         TourPackageEntity pkg = existing.get();
 
         // No se puede publicar como AVAILABLE si no tiene cupos

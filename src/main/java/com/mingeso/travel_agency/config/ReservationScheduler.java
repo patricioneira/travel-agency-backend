@@ -29,8 +29,7 @@ public class ReservationScheduler {
                 .filter(r -> "PENDING_PAYMENT".equals(r.getStatus()))
                 .filter(r -> r.getRegistrationDate() != null
                         && r.getRegistrationDate().isBefore(expirationLimit))
-                .toList();
-
+                .collect(java.util.stream.Collectors.toList());
         for (ReservationEntity reservation : expired) {
             reservation.setStatus("CANCELLED");
             reservationRepository.save(reservation);
